@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 class Registro extends StatefulWidget{
+  final String cadena;
+  Registro(this.cadena);
+
   @override
   RegistroApp createState() => RegistroApp();
 
@@ -36,7 +41,7 @@ class RegistroApp extends State<Registro>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro de Usuarios'),
+        title: Text('Registro de Usuarios --> ' + widget.cadena),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -90,7 +95,7 @@ class RegistroApp extends State<Registro>{
               child: TextField(
                 controller: contrasena,
                 decoration: InputDecoration(
-                    labelText: 'Contraseña'
+                    labelText: ('Contraseña')
                 ),
                 style: TextStyle(
                     color: Colors.teal
@@ -102,7 +107,15 @@ class RegistroApp extends State<Registro>{
 
                 onPressed: (){
                   print(nombre.text);
+                  print('contrasena original ${contrasena.text}');
+                  contrasena.text = sha1.convert(utf8.encode(contrasena.text)).toString();
+                  print('crypto SHA-1 :' + (contrasena.text));
                   insertarDatos();
+                  nombre.clear();
+                  identificacion.clear();
+                  correo.clear();
+                  telefono.clear();
+                  contrasena.clear();
                 },
 
                 child: Text('Registrar')
